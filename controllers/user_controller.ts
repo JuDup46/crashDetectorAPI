@@ -40,4 +40,67 @@ export class UserController {
         return [];
     }
 
+    /**
+     * Récupération d'un utilisateur depuis son email :
+     * @param email
+     */
+    async getUserByEmail(email: string): Promise<Object | null> {
+        //récupération de l'utilisateur
+        const res = await this.connection.query(`SELECT *
+                                                 FROM users
+                                                 where email = '${email}'`);
+        const data = res[0];
+        if (Array.isArray(data)) {
+            const rows = data as RowDataPacket[];
+            if (rows.length > 0) {
+                const row = rows[0];
+                return new Object({
+                    id: Number.parseInt(row["idusers"]),
+                    nom : row["nom"],
+                    prenom : row["prenom"],
+                    email: row["email"],
+                    tel : row["tel"],
+                    idgoogle : row["idgoogle"],
+                    idscooter : row["idscooter"],
+                });
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Création d'un user
+     * @param options
+     */
+    async createUser( nom:string, prenom:string, email:string, tel:string, idgoogle:string, idscooter:string): Promise<Object | null | string> {
+
+        if (nom === undefined || prenom === undefined ||
+            email === undefined || tel === undefined ||
+            idgoogle === undefined || idscooter === undefined) {
+            return null;
+        }
+
+        if (await this.getUserByEmail(email) !== null) {
+            return "Their is already an user associated to this email";
+        }
+
+        const res = await this.connection.execute(`INSERT INTO users (nom, prenom, email, tel, idgoogle, idscooter)
+                                                   VALUES (?, ?, ?, ?, ?, ?)`,
+            [
+                nom,
+                prenom,
+                email,
+                tel,
+                idgoogle,
+                idscooter
+            ]);
+        const headers = res[0] as ResultSetHeader;
+        if (headers.affectedRows === 1) {
+            return this.getUserByEmail(email);
+        }
+        return null;
+    }
+
+
+
 }
