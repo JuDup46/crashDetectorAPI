@@ -11,7 +11,7 @@ twillio_router.get("/",async function (req, res) {
     client.calls
         .create({
             twiml: '<Response><Say>bonjour monsieur, comment vas tu ?</Say></Response>',
-            to: process.env.PHONENUMBER,
+            to: process.env.PHONE_NUMBER,
             from: '+12253073611',
         })
         .then((call: { sid: any; }) => console.log(call.sid))
