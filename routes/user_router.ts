@@ -58,7 +58,6 @@ userRouter.get("/email", async function (req, res) {
         res.json(user);
         return;
     }
-    return;
 });
 
 /**
