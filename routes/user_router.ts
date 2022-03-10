@@ -61,6 +61,27 @@ userRouter.get("/email", async function (req, res) {
     return;
 });
 
+userRouter.get("/connexion", async function (req, res) {
+
+    const connection = await DatabaseUtils.getConnection();
+    const userController = new UserController(connection);
+    const email = req.body.email;
+    const idscooter = req.body.idscooter;
+    if (email === undefined || email === "" || idscooter === undefined || idscooter === "") {
+        res.status(400).send('User email or idscooter is missing');
+        return;
+    }
+    const user = await userController.getUserByEmailAndidScooter(email,idscooter);
+    if (user === null) {
+        res.status(404).send("This user doesn't exist");
+        return;
+    } else {
+        res.json(user);
+        return;
+    }
+    return;
+});
+
 /**
  * Inscription d'un user
  * URL :

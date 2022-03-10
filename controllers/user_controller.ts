@@ -68,6 +68,29 @@ export class UserController {
         return null;
     }
 
+    async getUserByEmailAndidScooter(email: string, idScooter: string): Promise<Object | null> {
+        //récupération de l'utilisateur
+        const res = await this.connection.query(`SELECT *
+                                                 FROM users
+                                                 where email = '${email}' and idscooter = '${idScooter}'`);
+        const data = res[0];
+        if (Array.isArray(data)) {
+            const rows = data as RowDataPacket[];
+            if (rows.length > 0) {
+                const row = rows[0];
+                return new Object({
+                    id: Number.parseInt(row["idusers"]),
+                    nom : row["nom"],
+                    prenom : row["prenom"],
+                    email: row["email"],
+                    tel : row["tel"],
+                    idgoogle : row["idgoogle"],
+                    idscooter : row["idscooter"],
+                });
+            }
+        }
+        return null;
+    }
     /**
      * Création d'un user
      * @param options
