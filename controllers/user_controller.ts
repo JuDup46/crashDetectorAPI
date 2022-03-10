@@ -29,9 +29,10 @@ export class UserController {
                     id: Number.parseInt(row["idusers"]),
                     nom : row["nom"],
                     prenom : row["prenom"],
-                    password: row["password"],
                     email: row["email"],
-                    tel : row["tel"]
+                    tel : row["tel"],
+                    idgoogle : row["idgoogle"],
+                    idscooter : row["idscooter"],
                 });
             });
         }
