@@ -21,7 +21,19 @@ userRouter.get("/", async function (req, res) {
             res.status(404).send("There is no user").end();
             return;
         }
-        return;
+});
+
+
+userRouter.delete("/:iduser",async function (req, res) {
+    const connection = await DatabaseUtils.getConnection();
+    const userController = new UserController(connection);
+console.log(req.params.iduser);
+    if (!req.params.iduser) {
+        res.status(400).send({state: "Bad id"}).end();
+    }
+
+    await userController.deleteUserById(req.params.iduser as string);
+    res.status(204).send({state: "user deleted"}).end();
 });
 
 /**

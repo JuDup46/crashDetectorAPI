@@ -103,4 +103,12 @@ export class UserController {
 
 
 
+    async deleteUserById(idUser: string): Promise<Object | null | string> {
+        const res = await this.connection.execute(`DELETE from users where idusers = '${idUser}'`);
+        await this.connection.commit();
+        return null;
+    }
+
+
+
 }
