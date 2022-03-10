@@ -68,7 +68,7 @@ export class UserController {
         return null;
     }
 
-    async getUserTelWithEmail(email: string): Promise<string|null>{
+    async getUserTelWithEmail(email: string): Promise<UserDataTwilio|null>{
         //récupération de l'utilisateur
         const res = await this.connection.query(`SELECT *
                                                  FROM users
@@ -78,7 +78,11 @@ export class UserController {
             const rows = data as RowDataPacket[];
             if (rows.length > 0) {
                 const row = rows[0];
-                return row["tel"];
+                return {
+                    tel : row["tel"],
+                    firstName: row["prenom"],
+                    lastName: row["nom"]
+                };
             }
         }
         return null;
@@ -148,6 +152,10 @@ export class UserController {
         return null;
     }
 
+}
 
-
+export interface UserDataTwilio {
+    tel: string;
+    firstName: string;
+    lastName: string;
 }
