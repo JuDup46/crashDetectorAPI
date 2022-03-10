@@ -8,7 +8,7 @@ import {DatabaseUtils} from "../database/database";
 
 const twillio_router = express.Router();
 
-twillio_router.get("/:email",async function (req, res) {
+twillio_router.get("/:email/:coordonne",async function (req, res) {
     const connection = await DatabaseUtils.getConnection();
     const userController = new UserController(connection);
     const userData = await userController.getUserTelWithEmail(req.params.email)
@@ -25,7 +25,7 @@ twillio_router.get("/:email",async function (req, res) {
         .catch((reason: any) => console.log(reason));
 
     client.messages.create({
-        body:`Merci ${userData!.firstName} ${userData!.lastName}, votre demande a été traité !`,
+        body:`Merci ${userData!.firstName} ${userData!.lastName}, votre demande a été traité ! La position de la victime est à cette adresse : ${req.params.coordonne}`,
         from:"+12253073611",
         to:userData!.tel
     }).then((call: { sid: any; }) => console.log(call.sid))
