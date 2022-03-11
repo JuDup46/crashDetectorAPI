@@ -12,6 +12,9 @@ twillio_router.get("/:email/:coordonnee",async function (req, res) {
     const connection = await DatabaseUtils.getConnection();
     const userController = new UserController(connection);
     const userData = await userController.getUserTelWithEmail(req.params.email)
+    console.log(userData?.firstName)
+    if(userData?.firstName === null)
+        res.status(406).end();
     client.calls
         .create({
             twiml: '<Response>\n' +
